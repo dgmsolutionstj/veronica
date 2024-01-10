@@ -1,0 +1,45 @@
+{
+    "intents": [
+        {
+            "name": "greeting",
+            "patterns": ["hello", "hi", "hey", "good morning", "Wake up"],
+            "responses": ["Hello there", "Hi", "Greetings", "Howdy", "what's New", "What's Popen", "sup"]
+        },
+        {
+            "name": "name",
+            "patterns": ["what's your name", "who are you"],
+            "responses": ["I am Veronica, your personal assistant.", "My name is Veronica."]
+        },
+        {
+            "name": "quit",
+            "patterns": ["quit", "exit", "goodbye", "bye"],
+            "responses": ["Exiting the program. Goodbye Sir."]
+        },
+        {
+            "name": "time",
+            "patterns": ["time"],
+            "responses": []
+        },
+        {
+            "name": "date",
+            "patterns": ["date"],
+            "responses": []
+        },
+        {
+            "name": "wikipedia",
+            "patterns": ["tell me about", "what is", "who is", "Search for"],
+            "responses": []
+        },
+        {
+            "name": "fallback",
+            "patterns": [],
+            "responses": [
+                "I'm sorry, I didn't catch that.",
+                "Can you repeat that, please?",
+                "I'm not sure what you mean.",
+                "Excuse me?",
+                "I didn't quite understand your command."
+            ]
+        }
+    ]
+}
