@@ -31,6 +31,7 @@ Veronica v1.2 comes with the following features:
 - Retrieving real-time weather information for a specified city
 - Personalized greetings based on the time of the day
 - Customizable responses through intent configuration
+- Task management capabilities: add, save, delete, and review tasks
 
 ## Getting Started
 
@@ -59,11 +60,11 @@ Make sure to install these dependencies before running the application.
 
 ## Configuration
 
-Veronica uses an 'intents.json' file for customizing responses. You can modify this file to add new intents or customize existing ones.
+Veronica uses an 'intents.json' file for customizing responses. You can modify this file to add new intents or customize existing ones. Task-related functionalities are managed through the 'tasks.txt' file.
 
 ## Usage
 
-Once the application is running, Veronica will greet you based on the time of the day. You can then issue voice commands for tasks such as checking the time, date, searching the web, calculating, checking the weather, and more.
+Once the application is running, Veronica will greet you based on the time of the day. You can then issue voice commands for tasks such as checking the time, date, searching the web, calculating, checking the weather, and managing tasks.
 
 To exit the application, use voice commands like "quit" or "exit."
 

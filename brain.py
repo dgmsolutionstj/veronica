@@ -120,7 +120,32 @@ def get_weather(city):
         print(f"Error during weather query: {e}")
         speak("An error occurred while fetching weather information. Please try again later.")
 
+tasks = []
 
+def add_task(task):
+    tasks.append(task)
+    speak(f"Item '{task}' has been added.")
+
+def save_tasks():
+    with open('tasks.txt', 'w') as file:
+        for task in tasks:
+            file.write(task + '\n')
+    speak("Item have been saved.")
+
+def delete_task(task):
+    if task in tasks:
+        tasks.remove(task)
+        speak(f"Item '{task}' has been deleted.")
+    else:
+        speak(f"Item '{task}' not found.")
+
+def review_tasks():
+    if tasks:
+        speak("Here are your current Items:")
+        for i, task in enumerate(tasks, start=1):
+            speak(f"{i}. {task}")
+    else:
+        speak("You don't have any items at the moment.")
 
 #& Veronica will greet the user depending on the time of the day.
 def greeting():
@@ -149,8 +174,23 @@ if __name__ == '__main__':
         command = take_command()
 
         if any(exit_keyword in command for exit_keyword in ["quit", "exit"]):
+            save_tasks()
             speak("Exiting the room. Goodbye Sir.")
             exit()
+
+        if "add item" in command:
+            task = command.replace("add item", "").strip()
+            add_task(task)
+
+        elif "save item" in command:
+            save_tasks()
+
+        elif "delete item" in command:
+            task = command.replace("delete item", "").strip()
+            delete_task(task)
+
+        elif "review item" in command:
+            review_tasks()
 
         if "time" in command:
             current_time = datetime.datetime.now().strftime("%H:%M")

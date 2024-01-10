@@ -1,0 +1,6 @@
+pyttsx3==2.90
+datetime
+wikipedia==1.4.0
+SpeechRecognition==3.8.1
+wolframalpha==5.0.0
+requests==2.26.0
