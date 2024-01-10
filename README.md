@@ -1,4 +1,4 @@
-1/09/2024 = 1/10/2024
+1/09/2024 - 1/10/2024
 
 # Veronica v1.2 - Artificial Intelligent Personal Assistant
 

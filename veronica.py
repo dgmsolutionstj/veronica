@@ -127,14 +127,10 @@ def add_task(task):
     speak(f"Note '{task}' has been added.")
 
 def save_tasks():
-    try:
-        with open('tasks.txt', 'w') as file:
-            for task in tasks:
-                file.write(task + '\n')
-        speak("Notes have been saved.")
-    except Exception as e:
-        print(f"Error while saving tasks: {e}")
-        speak("Sorry, there was an issue saving your notes. Please try again later.")
+    with open('tasks.txt', 'w') as file:
+        for task in tasks:
+            file.write(task + '\n')
+    speak("Note have been saved.")
 
 def delete_task(task):
     if task in tasks:
@@ -239,4 +235,3 @@ if __name__ == '__main__':
                     break
             else:
                 speak(random.choice(random_responses)) 
-     

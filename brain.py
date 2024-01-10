@@ -1,77 +1,19 @@
-# DGTech Solutions LLC
-# Veronica v1.0.0
-# requests@dgtech.com
-# open-source project / Last Update: 1/09/2024
-# Day 1 on development.
-# ==================================================================================
-
-#* Import Modules
-#* Veronica's Skills List 
-import pyttsx3 as tts
-import datetime
+# veronica.py
 import wikipedia as wiki
-import speech_recognition as sr
 import wolframalpha
-import requests
+import datetime
 import random
+import requests
 import json
+from voice import speak
+from ears import take_command
+from tasks import add_task, save_tasks, delete_task, review_tasks
 
-#* Start the voice engine for Veronica.
-engine = tts.init('sapi5')
-
-#* Setting the rate of the voice of Veronica
-rate = engine.getProperty('rate')
-engine.setProperty('rate', 135)
-
-#* OpenWeatherMap API Key - Replace 'YOUR_OPENWEATHERMAP_API_KEY' with your actual API key
+# Constants
 OPENWEATHERMAP_API_KEY = 'f0c07340096e1c136205f769a53831f9'
-
-#* Wolfram Alpha API Key - Replace 'YOUR_WOLFRAM_ALPHA_API_KEY' with your actual API key
 WOLFRAM_ALPHA_APP_ID = '6YLR5Q-UYLY82PJ9T'
 
-#& Creating the voice of Veronica.
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
-
-#& Function to recognize speech
-def take_command():
-    r = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source)
-        print("Adjusted energy_threshold:", r.energy_threshold)
-
-        print("Listening...")
-        r.pause_threshold = 1
-        audio = r.listen(source)
-
-    try:
-        print("Recognizing...")
-        command = r.recognize_google(audio).lower()
-        print(f"You said: {command}")
-        return command
-    except sr.UnknownValueError:
-        print("Sorry, I did not understand your command.")
-        return ""
-    except sr.RequestError as e:
-        print(f"Error with the speech recognition service; {e}")
-        speak("I am sorry, but I am having trouble with the speech recognition service.")
-        return ""
-
-def load_intents():
-    try:
-        with open('./intents.json', 'r') as file:
-            intents = json.load(file)
-        return intents['intents']
-    except FileNotFoundError:
-        print("Intents file not found.")
-        speak("I am sorry, but there seems to be an issue with my configuration. Please contact support.")
-        exit()
-    except json.JSONDecodeError:
-        print("Error decoding intents file.")
-        speak("I am sorry, but there seems to be an issue with my configuration. Please contact support.")
-        exit()
+tasks = []
 
 def get_response(intent_name, intents, random_responses):
     for intent in intents:
@@ -92,13 +34,13 @@ def wolfram_alpha_query(query):
     except Exception as e:
         print(f"Error during Wolfram Alpha query: {e}")
         return "An error occurred while processing the calculation. Please try again later."
-    
+
 def get_weather(city):
     base_url = "http://api.openweathermap.org/data/2.5/weather"
     params = {
         'q': city,
         'appid': OPENWEATHERMAP_API_KEY,
-        'units': 'metric'  # You can change units to 'imperial' for Fahrenheit
+        'units': 'metric'
     }
 
     try:
@@ -120,56 +62,36 @@ def get_weather(city):
         print(f"Error during weather query: {e}")
         speak("An error occurred while fetching weather information. Please try again later.")
 
-tasks = []
+def load_intents():
+    try:
+        with open('./intents.json', 'r') as file:
+            intents = json.load(file)
+        return intents['intents']
+    except FileNotFoundError:
+        print("Intents file not found.")
+        speak("I am sorry, but there seems to be an issue with my configuration. Please contact support.")
+        exit()
+    except json.JSONDecodeError:
+        print("Error decoding intents file.")
+        speak("I am sorry, but there seems to be an issue with my configuration. Please contact support.")
+        exit()
 
-def add_task(task):
-    tasks.append(task)
-    speak(f"Item '{task}' has been added.")
-
-def save_tasks():
-    with open('tasks.txt', 'w') as file:
-        for task in tasks:
-            file.write(task + '\n')
-    speak("Item have been saved.")
-
-def delete_task(task):
-    if task in tasks:
-        tasks.remove(task)
-        speak(f"Item '{task}' has been deleted.")
-    else:
-        speak(f"Item '{task}' not found.")
-
-def review_tasks():
-    if tasks:
-        speak("Here are your current Items:")
-        for i, task in enumerate(tasks, start=1):
-            speak(f"{i}. {task}")
-    else:
-        speak("You don't have any items at the moment.")
-
-#& Veronica will greet the user depending on the time of the day.
 def greeting():
-
     current_hour = datetime.datetime.now().hour
-
     if 0 <= current_hour < 12:
         speak("Good Morning Sir")
     elif 12 <= current_hour < 17:
         speak("Good afternoon Sir")
     else:
         speak("Good Night Sir")
-
     speak("How can I help you today")
 
 if __name__ == '__main__':
-
     intents = load_intents()
-
     random_responses = [response for intent in intents if intent['name'] == 'fallback' for response in intent['responses']]
 
     greeting()
 
-    #& Veronica now can response to human voice.
     while True:
         command = take_command()
 
@@ -178,18 +100,18 @@ if __name__ == '__main__':
             speak("Exiting the room. Goodbye Sir.")
             exit()
 
-        if "add item" in command:
-            task = command.replace("add item", "").strip()
+        if "add note" in command:
+            task = command.replace("add note", "").strip()
             add_task(task)
 
-        elif "save item" in command:
+        elif "save note" in command:
             save_tasks()
 
-        elif "delete item" in command:
-            task = command.replace("delete item", "").strip()
+        elif "delete note" in command:
+            task = command.replace("delete note", "").strip()
             delete_task(task)
 
-        elif "review item" in command:
+        elif "review note" in command:
             review_tasks()
 
         if "time" in command:
@@ -234,4 +156,5 @@ if __name__ == '__main__':
                     speak(get_response(intent['name'], intents, random_responses))
                     break
             else:
-                speak(random.choice(random_responses)) 
+                speak(random.choice(random_responses))
+
