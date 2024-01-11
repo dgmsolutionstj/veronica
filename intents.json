@@ -7,7 +7,7 @@
         },
         {
             "name": "name",
-            "patterns": ["what's your name", "who are you"],
+            "patterns": ["what's your name", "who are you", "how should I call you"],
             "responses": ["I am Veronica, your personal assistant.", "My name is Veronica."]
         },
         {
@@ -17,8 +17,8 @@
         },
         {
             "name": "random_question",
-            "patterns": ["ask a random question", "give me a random fact", "tell me something interesting"],
-            "responses": ["Sure, did you know that...", "Here's an interesting fact:", "I have a random tidbit for you:"]
+            "patterns": ["ask a question", "give me a random fact", "tell me something intersting"],
+            "responses": ["Sure, did you know that...Japanese Yen is the currency of Japan", "Here's an interesting fact: the speed of light is Approximately 299,792 kilometers per second ", "I have a random tidbit for you: What is the main ingredient in guacamole? Avocado"]
         },
         {
             "name": "time",
@@ -43,7 +43,8 @@
                 "Can you repeat that, please?",
                 "I'm not sure what you mean.",
                 "Excuse me?",
-                "I didn't quite understand your command."
+                "I didn't quite understand your command.",
+                "Are you drunk"
             ]
         }
     ]
