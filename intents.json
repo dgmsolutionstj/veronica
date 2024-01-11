@@ -16,6 +16,11 @@
             "responses": ["Exiting the program. Goodbye Sir."]
         },
         {
+            "name": "random_question",
+            "patterns": ["ask a random question", "give me a random fact", "tell me something interesting"],
+            "responses": ["Sure, did you know that...", "Here's an interesting fact:", "I have a random tidbit for you:"]
+        },
+        {
             "name": "time",
             "patterns": ["time"],
             "responses": []

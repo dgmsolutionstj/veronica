@@ -9,6 +9,10 @@ import requests
 import json
 import webbrowser
 
+# Importing a custom module 'ears' for the 'take_command' function
+from ears import take_command
+
+# API keys
 OPENWEATHERMAP_API_KEY = 'f0c07340096e1c136205f769a53831f9'
 WOLFRAM_ALPHA_APP_ID = '6YLR5Q-UYLY82PJ9T'
 
@@ -17,12 +21,25 @@ engine = tts.init('sapi5')
 rate = engine.getProperty('rate')
 engine.setProperty('rate', 135)
 
-# Your existing functions...
+# Function to generate a random question response
+def random_question(intents):
+    intent_name = "random_question"
+    intent = next((intent for intent in intents if intent['name'] == intent_name), None)
 
+    if intent:
+        response = random.choice(intent['responses'])
+        speak(response)
+    else:
+        speak("I'm sorry, but I couldn't find an answer to that question.")
+
+# Main function
 def main():
+
+     # Load predefined intents from a JSON file
     intents = load_intents()
     random_responses = [response for intent in intents if intent['name'] == 'fallback' for response in intent['responses']]
 
+    # Greet the user
     greet()
 
     while True:
@@ -83,6 +100,9 @@ def main():
             city = command.replace("weather", "").strip()
             get_weather(city)
 
+        elif "who made you" in command:
+            speak("I was created by DGTech Solutions, and Mr Diego Garcia.")
+
         elif "search google" in command:
             query = command.replace("search google", "").strip()
             google_search(query)
@@ -111,30 +131,6 @@ def greet():
 def speak(text):
     engine.say(text)
     engine.runAndWait()
-
-def take_command():
-    r = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source)
-        print("Adjusted energy_threshold:", r.energy_threshold)
-
-        print("Listening...")
-        r.pause_threshold = 1
-        audio = r.listen(source)
-
-    try:
-        print("Recognizing...")
-        command = r.recognize_google(audio).lower()
-        print(f"You said: {command}")
-        return command
-    except sr.UnknownValueError:
-        print("Sorry, I did not understand your command.")
-        return ""
-    except sr.RequestError as e:
-        print(f"Error with the speech recognition service; {e}")
-        speak("I am sorry, but I am having trouble with the speech recognition service.")
-        return ""
 
 def load_intents():
     try:
