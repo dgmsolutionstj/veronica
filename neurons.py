@@ -1,40 +1,38 @@
-# DGTech Solutions LLC
-# Veronica v1.0.0
-# requests@dgtech.com
-# open-source project / Last Update: 1/10/2024
-# Day 1 on development.
-# ==================================================================================
-
-#* Import Modules
-#* Veronica's Skills List 
+# neurons.py
+from datetime import datetime
 import pyttsx3 as tts
-import datetime
-import wikipedia as wiki
 import speech_recognition as sr
+import wikipedia as wiki
 import wolframalpha
-import requests
 import random
+import requests
 import json
+import webbrowser
 
-#* Start the voice engine for Veronica.
+OPENWEATHERMAP_API_KEY = 'f0c07340096e1c136205f769a53831f9'
+WOLFRAM_ALPHA_APP_ID = '6YLR5Q-UYLY82PJ9T'
+
+# Start the voice engine for Veronica.
 engine = tts.init('sapi5')
-
-#* Setting the rate of the voice of Veronica
 rate = engine.getProperty('rate')
 engine.setProperty('rate', 135)
 
-#* OpenWeatherMap API Key - Replace 'YOUR_OPENWEATHERMAP_API_KEY' with your actual API key
-OPENWEATHERMAP_API_KEY = 'f0c07340096e1c136205f769a53831f9'
+def greet():
+    current_hour = datetime.now().hour
 
-#* Wolfram Alpha API Key - Replace 'YOUR_WOLFRAM_ALPHA_API_KEY' with your actual API key
-WOLFRAM_ALPHA_APP_ID = '6YLR5Q-UYLY82PJ9T'
+    if 0 <= current_hour < 12:
+        speak("Good Morning Sir")
+    elif 12 <= current_hour < 17:
+        speak("Good afternoon Sir")
+    else:
+        speak("Good Night Sir")
 
-#& Creating the voice of Veronica.
+    speak("How can I help you today")
+
 def speak(text):
     engine.say(text)
     engine.runAndWait()
 
-#& Function to recognize speech
 def take_command():
     r = sr.Recognizer()
 
@@ -92,7 +90,7 @@ def wolfram_alpha_query(query):
     except Exception as e:
         print(f"Error during Wolfram Alpha query: {e}")
         return "An error occurred while processing the calculation. Please try again later."
-    
+
 def get_weather(city):
     base_url = "http://api.openweathermap.org/data/2.5/weather"
     params = {
@@ -120,6 +118,11 @@ def get_weather(city):
         print(f"Error during weather query: {e}")
         speak("An error occurred while fetching weather information. Please try again later.")
 
+def google_search(query):
+    search_url = f"https://www.google.com/search?q={query}"
+    speak(f"Searching Google for {query}")
+    webbrowser.open(search_url)
+
 tasks = []
 
 def add_task(task):
@@ -146,92 +149,3 @@ def review_tasks():
             speak(f"{i}. {task}")
     else:
         speak("You don't have any Notes at the moment.")
-
-#& Veronica will greet the user depending on the time of the day.
-def greeting():
-
-    current_hour = datetime.datetime.now().hour
-
-    if 0 <= current_hour < 12:
-        speak("Good Morning Sir")
-    elif 12 <= current_hour < 17:
-        speak("Good afternoon Sir")
-    else:
-        speak("Good Night Sir")
-
-    speak("How can I help you today")
-
-if __name__ == '__main__':
-
-    intents = load_intents()
-
-    random_responses = [response for intent in intents if intent['name'] == 'fallback' for response in intent['responses']]
-
-    greeting()
-
-    #& Veronica now can response to human voice.
-    while True:
-        command = take_command()
-
-        if any(exit_keyword in command for exit_keyword in ["quit", "exit"]):
-            save_tasks()
-            speak("Exiting the room. Goodbye Sir.")
-            exit()
-
-        if "add note" in command:
-            task = command.replace("add note", "").strip()
-            add_task(task)
-
-        elif "save note" in command:
-            save_tasks()
-
-        elif "delete note" in command:
-            task = command.replace("delete note", "").strip()
-            delete_task(task)
-
-        elif "review note" in command:
-            review_tasks()
-
-        if "time" in command:
-            current_time = datetime.datetime.now().strftime("%H:%M")
-            speak(f"The current time Sir is {current_time}")
-
-        elif "date" in command:
-            current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-            speak(f"Today Sir is {current_date}")
-
-        elif "search" in command:
-            search_query = command.replace("search", "").strip()
-            try:
-                result = wiki.summary(search_query, sentences=4)
-                print(result)
-                speak(result)
-            except wiki.exceptions.DisambiguationError:
-                speak("There are multiple matches. Please be more specific.")
-            except wiki.exceptions.PageError:
-                speak("I couldn't find any information on that topic.")
-            except Exception as e:
-                print(f"Error during Wikipedia search: {e}")
-                speak("An error occurred while fetching information. Please try again later.")
-
-        elif "calculate" in command:
-            query = command.replace("calculate", "").strip()
-            try:
-                result = wolfram_alpha_query(query)
-                print(result)
-                speak(result)
-            except Exception as e:
-                print(f"Error during Wolfram Alpha query: {e}")
-                speak("An error occurred while processing the calculation. Please try again later.")
-
-        elif "weather" in command:
-            city = command.replace("weather", "").strip()
-            get_weather(city)
-
-        else:
-            for intent in intents:
-                if any(pattern in command for pattern in intent['patterns']):
-                    speak(get_response(intent['name'], intents, random_responses))
-                    break
-            else:
-                speak(random.choice(random_responses)) 

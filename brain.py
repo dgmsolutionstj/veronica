@@ -1,96 +1,15 @@
-# veronica.py
-import wikipedia as wiki
-import wolframalpha
+# brain.py
 import datetime
+import wikipedia as wiki
 import random
-import requests
-import json
-from voice import speak
-from ears import take_command
-from tasks import add_task, save_tasks, delete_task, review_tasks
 
-# Constants
-OPENWEATHERMAP_API_KEY = 'f0c07340096e1c136205f769a53831f9'
-WOLFRAM_ALPHA_APP_ID = '6YLR5Q-UYLY82PJ9T'
+from neurons import greet, speak, take_command, load_intents, get_response, wolfram_alpha_query, get_weather, google_search, add_task, save_tasks, delete_task, review_tasks
 
-tasks = []
-
-def get_response(intent_name, intents, random_responses):
-    for intent in intents:
-        if intent['name'] == intent_name:
-            return random.choice(intent['responses'])
-    return random.choice(random_responses)
-
-def wolfram_alpha_query(query):
-    client = wolframalpha.Client(WOLFRAM_ALPHA_APP_ID)
-    try:
-        res = client.query(query)
-        pods = [pod.text for pod in res.pods if pod.text]
-        if pods:
-            answer = "\n".join(pods)
-            return answer
-        else:
-            return "I'm sorry, I couldn't find an answer to that question."
-    except Exception as e:
-        print(f"Error during Wolfram Alpha query: {e}")
-        return "An error occurred while processing the calculation. Please try again later."
-
-def get_weather(city):
-    base_url = "http://api.openweathermap.org/data/2.5/weather"
-    params = {
-        'q': city,
-        'appid': OPENWEATHERMAP_API_KEY,
-        'units': 'metric'
-    }
-
-    try:
-        response = requests.get(base_url, params=params)
-        print(f"API Status Code: {response.status_code}")
-        print(f"API Response: {response.text}")
-
-        if response.status_code == 200:
-            weather_data = response.json()
-            temperature = weather_data['main']['temp']
-            description = weather_data['weather'][0]['description']
-            speak(f"The current weather in {city} is {temperature} degrees Celsius with {description}.")
-        elif response.status_code == 404:
-            speak(f"Sorry, I couldn't find weather information for {city}. Please check the city name and try again.")
-        else:
-            speak("Sorry, I couldn't retrieve the weather information. Please try again later.")
-
-    except Exception as e:
-        print(f"Error during weather query: {e}")
-        speak("An error occurred while fetching weather information. Please try again later.")
-
-def load_intents():
-    try:
-        with open('./intents.json', 'r') as file:
-            intents = json.load(file)
-        return intents['intents']
-    except FileNotFoundError:
-        print("Intents file not found.")
-        speak("I am sorry, but there seems to be an issue with my configuration. Please contact support.")
-        exit()
-    except json.JSONDecodeError:
-        print("Error decoding intents file.")
-        speak("I am sorry, but there seems to be an issue with my configuration. Please contact support.")
-        exit()
-
-def greeting():
-    current_hour = datetime.datetime.now().hour
-    if 0 <= current_hour < 12:
-        speak("Good Morning Sir")
-    elif 12 <= current_hour < 17:
-        speak("Good afternoon Sir")
-    else:
-        speak("Good Night Sir")
-    speak("How can I help you today")
-
-if __name__ == '__main__':
+def main():
     intents = load_intents()
     random_responses = [response for intent in intents if intent['name'] == 'fallback' for response in intent['responses']]
 
-    greeting()
+    greet()
 
     while True:
         command = take_command()
@@ -150,6 +69,10 @@ if __name__ == '__main__':
             city = command.replace("weather", "").strip()
             get_weather(city)
 
+        elif "search google" in command:
+            query = command.replace("search google", "").strip()
+            google_search(query)
+
         else:
             for intent in intents:
                 if any(pattern in command for pattern in intent['patterns']):
@@ -158,3 +81,5 @@ if __name__ == '__main__':
             else:
                 speak(random.choice(random_responses))
 
+if __name__ == '__main__':
+    main()
