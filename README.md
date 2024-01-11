@@ -1,72 +1,105 @@
 1/09/2024 - 1/10/2024
 
-# Veronica v1.2 - Artificial Intelligent Personal Assistant
+# Veronica v2.0 - AI Personal Assistant
 
 ## Project Overview
 
-Veronica is an open-source artificial intelligent personal assistant developed by DGTech Solutions LLC. It is designed to perform various tasks, including answering questions, providing weather information, retrieving Wikipedia articles, and more, all through voice commands.
+Veronica v2.0 is an upgraded version of the open-source artificial intelligent personal assistant developed by DGTech Solutions LLC. The project is now organized into modular Python files: `brain.py`, `neurons.py`, `voice.py`, and `ears.py`. These files collectively enhance the user experience by introducing task management capabilities and improved modularity.
 
 ## Table of Contents
 
-- [Introduction](#veronica-v12---artificial-intelligent-personal-assistant)
+- [Introduction](#veronica-v20---ai-personal-assistant)
 - [Project Overview](#project-overview)
 - [Features](#features)
 - [Getting Started](#getting-started)
-- [Dependencies](#dependencies)
-- [Configuration](#configuration)
+- [Installation](#installation)
 - [Usage](#usage)
+- [User Manual](#user-manual)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 
 ## Features
 
-Veronica v1.2 comes with the following features:
+Veronica v2.0 introduces the following features:
 
-- Speech recognition and synthesis capabilities
-- Querying and summarizing information from Wikipedia
-- Answering general knowledge questions
-- Providing current time and date
-- Performing calculations through Wolfram Alpha
-- Retrieving real-time weather information for a specified city
-- Personalized greetings based on the time of the day
-- Customizable responses through intent configuration
-- Task management capabilities: add, save, delete, and review tasks
+- Modular organization of code into `brain`, `neurons`, `voice`, and `ears`.
+- Task management capabilities: add, save, delete, and review notes.
+- Improved voice synthesis and recognition.
+- Enhanced natural language processing for a wider range of commands.
+- Integration with Wikipedia, Wolfram Alpha, and Google Search for information retrieval.
+- Real-time weather information retrieval.
+- Customizable responses through intent configuration.
+- Time and date information retrieval.
 
 ## Getting Started
 
-To get started with Veronica, follow these steps:
+To get started with Veronica v2.0, follow the steps below:
 
 1. Clone the repository: `git clone https://github.com/your-username/veronica.git`
 2. Navigate to the project directory: `cd veronica`
 3. Install the required dependencies: `pip install -r requirements.txt`
-4. Configure API keys in the code: Replace 'YOUR_OPENWEATHERMAP_API_KEY' and 'YOUR_WOLFRAM_ALPHA_API_KEY' with your actual API keys.
-5. Run the application: `python veronica.py`
+4. Configure API keys in `neurons.py`: Replace 'YOUR_OPENWEATHERMAP_API_KEY' and 'YOUR_WOLFRAM_ALPHA_API_KEY' with your actual API keys.
+5. Run the application: `python brain.py`
 
-## Dependencies
+## Installation
 
-Veronica relies on the following Python modules:
+Veronica v2.0 requires the following Python packages. You can install them using the provided `requirements.txt` file:
 
-- pyttsx3
-- datetime
-- wikipedia
-- speech_recognition
-- wolframalpha
-- requests
-- random
-- json
+```plaintext
+pyttsx3==2.90
+datetime
+wikipedia==1.4.0
+SpeechRecognition==3.8.1
+wolframalpha==5.0.0
+requests==2.26.0
+```
 
-Make sure to install these dependencies before running the application.
-
-## Configuration
-
-Veronica uses an 'intents.json' file for customizing responses. You can modify this file to add new intents or customize existing ones. Task-related functionalities are managed through the 'tasks.txt' file.
+Install the dependencies by running `pip install -r requirements.txt`.
 
 ## Usage
 
-Once the application is running, Veronica will greet you based on the time of the day. You can then issue voice commands for tasks such as checking the time, date, searching the web, calculating, checking the weather, and managing tasks.
+Run the application by executing `python brain.py`. Veronica will greet you based on the time of day and respond to voice commands. You can use commands for tasks such as checking the time, date, adding, saving, deleting, and reviewing notes, searching the web, calculating, checking the weather, and more.
 
 To exit the application, use voice commands like "quit" or "exit."
+
+## User Manual
+
+1. **Adding a Note:**
+   - Command: "add note [your note]"
+   - Example: "add note Remember to buy groceries."
+
+2. **Saving Notes:**
+   - Command: "save note"
+   - Example: "save note"
+
+3. **Deleting a Note:**
+   - Command: "delete note [note to delete]"
+   - Example: "delete note Buy groceries."
+
+4. **Reviewing Notes:**
+   - Command: "review note"
+   - Example: "review note"
+
+5. **Google Search:**
+   - Command: "search google [your search query]"
+   - Example: "search google OpenAI GPT-4."
+
+6. **Weather Information:**
+   - Command: "weather [city]"
+   - Example: "weather New York."
+
+7. **Time and Date:**
+   - Command: "time" or "date"
+   - Example: "time" or "date"
+
+8. **Wikipedia Search:**
+   - Command: "search [your search query]"
+   - Example: "search Artificial Intelligence."
+
+9. **Wolfram Alpha Calculation:**
+   - Command: "calculate [your calculation]"
+   - Example: "calculate 2 + 2."
 
 ## Contributing
 
