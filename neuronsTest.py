@@ -8,6 +8,10 @@ import wolframalpha
 import random
 import requests
 import numpy as np
+import schedule
+import time
+import os
+import platform
 import json
 import webbrowser
 import requests
@@ -263,3 +267,4 @@ def review_tasks():
             speak(f"{i}. {task}")
     else:
         speak("You don't have any Notes at the moment.")
+
