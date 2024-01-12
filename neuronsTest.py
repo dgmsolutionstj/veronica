@@ -27,7 +27,7 @@ WOLFRAM_ALPHA_APP_ID = '6YLR5Q-UYLY82PJ9T'
 # Start the voice engine for Veronica.
 engine = tts.init('sapi5')
 rate = engine.getProperty('rate')
-engine.setProperty('rate', 135)
+engine.setProperty('rate', 150)
 
 # Function to generate a random question response
 def random_question(intents):
